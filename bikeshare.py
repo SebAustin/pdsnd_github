@@ -13,6 +13,14 @@ VALID_DAYS = ['all', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'sa
 MONTH_NAMES = ['January', 'February', 'March', 'April', 'May', 'June']
 
 
+def convert_seconds_to_readable(seconds):
+    """Convert seconds to a readable hours, minutes, seconds format."""
+    hours = int(seconds // 3600)
+    minutes = int((seconds % 3600) // 60)
+    secs = int(seconds % 60)
+    return hours, minutes, secs
+
+
 def get_user_input(prompt, valid_options, error_message):
     """Helper function to get and validate user input."""
     while True:
@@ -58,6 +66,7 @@ def load_data(city, month, day):
     df['Start Time'] = pd.to_datetime(df['Start Time'])
     df['month'] = df['Start Time'].dt.month
     df['day_of_week'] = df['Start Time'].dt.day_name()
+    df['hour'] = df['Start Time'].dt.hour  # Extract hour once for efficiency
 
     if month != 'all':
         month_num = VALID_MONTHS.index(month)
@@ -80,7 +89,7 @@ def time_stats(df):
     common_day = df['day_of_week'].mode()[0]
     print('Most Common Day of Week:', common_day)
 
-    df['hour'] = df['Start Time'].dt.hour
+    # Hour already extracted in load_data for efficiency
     common_hour = df['hour'].mode()[0]
     print('Most Common Start Hour:', common_hour)
 
@@ -113,9 +122,7 @@ def trip_duration_stats(df):
     start_time = time.time()
 
     total_travel_time = df['Trip Duration'].sum()
-    hours = int(total_travel_time // 3600)
-    minutes = int((total_travel_time % 3600) // 60)
-    seconds = int(total_travel_time % 60)
+    hours, minutes, seconds = convert_seconds_to_readable(total_travel_time)
     print('Total Travel Time: {} hours, {} minutes, {} seconds'.format(hours, minutes, seconds))
 
     mean_travel_time = df['Trip Duration'].mean()
