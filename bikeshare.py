@@ -84,16 +84,16 @@ def time_stats(df):
     start_time = time.time()
 
     common_month = df['month'].mode()[0]
-    print('Most Common Month:', MONTH_NAMES[common_month - 1])
+    print(f'Most Common Month: {MONTH_NAMES[common_month - 1]}')
 
     common_day = df['day_of_week'].mode()[0]
-    print('Most Common Day of Week:', common_day)
+    print(f'Most Common Day of Week: {common_day}')
 
     # Hour already extracted in load_data for efficiency
     common_hour = df['hour'].mode()[0]
-    print('Most Common Start Hour:', common_hour)
+    print(f'Most Common Start Hour: {common_hour}')
 
-    print("\nThis took %s seconds." % (time.time() - start_time))
+    print(f"\nThis took {time.time() - start_time:.4f} seconds.")
     print('-'*40)
 
 
@@ -103,16 +103,16 @@ def station_stats(df):
     start_time = time.time()
 
     common_start_station = df['Start Station'].mode()[0]
-    print('Most Common Start Station:', common_start_station)
+    print(f'Most Common Start Station: {common_start_station}')
 
     common_end_station = df['End Station'].mode()[0]
-    print('Most Common End Station:', common_end_station)
+    print(f'Most Common End Station: {common_end_station}')
 
     df['trip'] = df['Start Station'] + ' --> ' + df['End Station']
     common_trip = df['trip'].mode()[0]
-    print('Most Common Trip:', common_trip)
+    print(f'Most Common Trip: {common_trip}')
 
-    print("\nThis took %s seconds." % (time.time() - start_time))
+    print(f"\nThis took {time.time() - start_time:.4f} seconds.")
     print('-'*40)
 
 
@@ -123,14 +123,14 @@ def trip_duration_stats(df):
 
     total_travel_time = df['Trip Duration'].sum()
     hours, minutes, seconds = convert_seconds_to_readable(total_travel_time)
-    print('Total Travel Time: {} hours, {} minutes, {} seconds'.format(hours, minutes, seconds))
+    print(f'Total Travel Time: {hours} hours, {minutes} minutes, {seconds} seconds')
 
     mean_travel_time = df['Trip Duration'].mean()
     mean_minutes = int(mean_travel_time // 60)
     mean_seconds = int(mean_travel_time % 60)
-    print('Average Travel Time: {} minutes, {} seconds'.format(mean_minutes, mean_seconds))
+    print(f'Average Travel Time: {mean_minutes} minutes, {mean_seconds} seconds')
 
-    print("\nThis took %s seconds." % (time.time() - start_time))
+    print(f"\nThis took {time.time() - start_time:.4f} seconds.")
     print('-'*40)
 
 
@@ -140,11 +140,11 @@ def user_stats(df):
     start_time = time.time()
 
     user_types = df['User Type'].value_counts()
-    print('User Types:\n', user_types)
+    print(f'User Types:\n{user_types}')
 
     try:
         gender_counts = df['Gender'].value_counts()
-        print('\nGender Breakdown:\n', gender_counts)
+        print(f'\nGender Breakdown:\n{gender_counts}')
     except KeyError:
         print('\nGender data is not available for this city.')
 
@@ -153,13 +153,13 @@ def user_stats(df):
         most_recent_birth_year = int(df['Birth Year'].max())
         most_common_birth_year = int(df['Birth Year'].mode()[0])
         print('\nBirth Year Statistics:')
-        print('  Earliest Birth Year:', earliest_birth_year)
-        print('  Most Recent Birth Year:', most_recent_birth_year)
-        print('  Most Common Birth Year:', most_common_birth_year)
+        print(f'  Earliest Birth Year: {earliest_birth_year}')
+        print(f'  Most Recent Birth Year: {most_recent_birth_year}')
+        print(f'  Most Common Birth Year: {most_common_birth_year}')
     except KeyError:
         print('\nBirth Year data is not available for this city.')
 
-    print("\nThis took %s seconds." % (time.time() - start_time))
+    print(f"\nThis took {time.time() - start_time:.4f} seconds.")
     print('-'*40)
 
 
